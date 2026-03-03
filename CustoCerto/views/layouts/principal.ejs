@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CustoCerto</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container-principal">
+        <header class="cabecalho">
+            <div class="cabecalho-conteudo">
+                <nav class="nav-menu">
+                    <div class="nav-logo">
+                        <img src="/img/logo.png" alt="Logo CustoCerto" class="logo">
+                    </div>
+                    <ul class="nav-links">
+                        <li><a href="/" class="nav-link">🏠</a></li>
+                        <li><a href="/usuarios/listar" class="nav-link">Usuários</a></li>
+                        <li><a href="/receitas/listar" class="nav-link">Receitas</a></li>
+                        <li><a href="/ingredientes/listar" class="nav-link">Ingredientes</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <%- body %>
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2026 SESI / SENAI
+    </footer>
+</body>
+</html>
