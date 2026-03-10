@@ -1,0 +1,53 @@
+/* Corpo */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    color: black;
+}
+
+/* Header */
+header {
+    background-color: skyblue;
+    color: white;
+    padding: 1rem;
+    width: 100%;
+}
+
+/* Links da Navegação */ 
+.nav-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+}
+
+/* Div Entre em Contato */
+.contato {
+    background-color: #f4f4f4;
+    padding: 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Imagens */
+img {
+    max-width: 20%;
+    height: auto;
+}
+
+/* Modalidades */
+.modalidades {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding: 2rem;
+}
