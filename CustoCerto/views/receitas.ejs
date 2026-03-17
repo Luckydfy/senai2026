@@ -1,0 +1,15 @@
+<h1>Receitas</h1>
+<a href="/receitas/nova">Nova receita</a>
+<table border="1">
+    <tr>
+        <th>Nome</th>
+        <th>Rendimento</th>
+    </tr>
+
+    <% receitas.forEach(function(r){ %>
+        <tr>
+            <td><%= r.nome %></td>
+            <td><%= r.rendimento %></td>
+        </tr>
+    <% }) %>
+</table>

@@ -1,19 +1,28 @@
 const express = require('express');
-const expressLayouts = require('express-ejs-layouts');
-const rota_usuario = require('./routes/usuarios');
-const app = express();
-const port = 3000;
+const session = require('express-session');
+const bodyParser = require('body-parser');
 
-app.use(expressLayouts);
-app.set('layout', 'layouts/principal');
-app.set('view engine', 'ejs');
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use('/usuarios', rota_usuario);
-app.get('/', (req, res) => {
-    res.redirect('/usuarios/login');
-});
-app.listen(port, () => {
-    console.log(`Servidor executando em: http://localhost:${port}`);
+
+app.use(session({
+    secret: 'segredo',
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.set('view engine', 'ejs');
+
+const usuarios = require('./routes/usuarios');
+const ingredientes = require('./routes/ingredientes');
+const receitas = require('./routes/receitas');
+
+app.use('/', usuarios);
+app.use('/ingredientes', ingredientes);
+app.use('/receitas', receitas);
+
+app.listen(3000, () => {
+    console.log("Servidor rodando em http://localhost:3000");
 });

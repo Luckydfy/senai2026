@@ -1,0 +1,17 @@
+<h1>Ingredientes</h1>
+<a href="/ingredientes/novo">Novo ingrediente</a>
+<table border="1">
+    <tr>
+        <th>Nome</th>
+        <th>Unidade</th>
+        <th>Preço</th>
+    </tr>
+    
+    <% ingredientes.forEach(function(i){ %>
+        <tr>
+            <td><%= i.nome %></td>
+            <td><%= i.unidade %></td>
+            <td>R$ <%= i.preco_unitario %></td>
+        </tr>
+    <% }) %>
+</table>

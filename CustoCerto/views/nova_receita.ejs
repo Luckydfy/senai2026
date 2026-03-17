@@ -1,34 +1,22 @@
 <h1>Nova Receita</h1>
+<form action="/receitas/nova" method="POST">
 
-<form action="/receitas/cadastro" method="POST">
+    <label>Nome da receita</label>
+    <input type="text" name="nome"><br>
 
-    <label>Nome da Receita:</label>
-    <input type="text" name="nome" required>
+    <label>Rendimento</label>
+    <input type="number" name="rendimento">
 
-    <br><br>
-
-    <label>Modo de Preparo:</label>
-    <textarea name="modo_preparo"></textarea>
-
-    <br><br>
-
-    <h3>Produtos</h3>
-
-    <% produtos.forEach(produto => { %>
+    <h3>Ingredientes</h3>
+    <% ingredientes.forEach(function(i){ %>
         <div>
-            <input type="checkbox" name="produtos[<%= produto.id_produto %>][id_produto]" 
-                   value="<%= produto.id_produto %>">
-
-            <%= produto.nome %>
-
-            Quantidade:
-            <input type="number" step="0.01"
-                   name="produtos[<%= produto.id_produto %>][quantidade]">
+            <label><%= i.nome %></label>
+            <input type="number"
+            name="ingredientes[<%= i.id_ingrediente %>]"
+            step="0.01"
+            placeholder="Quantidade">
         </div>
-    <% }) %>
-
-    <br>
-
+    <% }) %><br>
+    
     <button type="submit">Salvar Receita</button>
-
 </form>

@@ -1,3 +1,4 @@
+
 CREATE TABLE pokemons (
 	imagem VARCHAR(255),
 	nome VARCHAR(50),

@@ -1,18 +1,13 @@
-<div class="card card-login">
-    <h1 class="card-title">Login</h1>
+<div class="login-box">
+    <h1>Login</h1>
     
-    <% if (mensagem) { %>
-        <p class="mensagem-alerta">
-            <%= mensagem %>
-        </p>
-    <% } %>
-    <form action="/usuarios/login" method="post" class="form-login">
-        <label for="usuario" class="label">Usuário</label>
-        <input type="text" id="usuario" name="usuario" required class="input-form">
-
-        <label for="senha" class="label">Senha</label>
-        <input type="password" id="senha" name="senha" required class="input-form">
-
-        <button type="submit" class="botao-form botao-entrar">Entrar</button>
+    <form action="/login" method="POST">
+        <label>Email</label>
+        <input type="email" name="email" required><br><br>
+    
+        <label>Senha</label>
+        <input type="password" name="senha" required><br><br>
+    
+        <button type="submit">Entrar</button>
     </form>
 </div>
