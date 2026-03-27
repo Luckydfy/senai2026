@@ -1,70 +1,76 @@
-// // Importa o Express (Framework para criar servidor HTTP e rotas)
-// const express = require('express');
+// [F1] Carregar dependências (módulos do projeto)
+// Express: cria servidor e rotas
+const express = require("express");
+// Axios: faz requisições HTTP para APIs externas
+const axios = require("axios");
+// CORS: libera o front-end (outras origens) acessarem este back-end
+const cors = require("cors");
 
-// // Importa Axios (cliente HTTP para consumir requisições a APIs externas)
-// const axios = require('axios');
+// [F2] Criar a aplicação (instância do servidor)
+const app = express();
 
-// // Importa o CORS (permite que fronts-ends de outras origens acessem seu backend)
-// const cors = require('cors');
+// [F3] Configurar middlewares globais (valem para todas as rotas)
+// Habilitar CORS (evita bloqueio do navegador por Same-Origin Policy)
+app.use(cors());
+// Habilitar JSON no body (permite ler req.body em requisições com JSON)
+app.use(express.json());
 
-// // Cria a aplicação Express (o "servidor" em si)
-// const app = express();
+// [F4] Definir configurações/constantes do projeto
+// BASE_URL = endereço da API externa que este servidor vai "proxiar"
+const BASE_URL = "https://dummyjson.com";
 
-// // Middleware global: libera CORS para todas as rotas
-// // Sem isso, o navegador pode bloquear chamadas do front-end
-// app.use(cors());
+// -------------------------------------------------------
+// [F5] Rotas básicas (raiz e status)
+// -------------------------------------------------------
 
-// // Middleware global: habilita leitura de JSON no corpo das requisições
-// // Sem isso, em um POST com JSON, req.body pode vir indefinido
-// app.use(express.json());
+// Rota de status (healthcheck)
+// Objetivo: teste rápido para saber se o servidor está no ar
+// GET /health -> { ok: true }
+app.get("/health", (req, res) => {
+  res.json({ ok: true });
+});
 
-// // URL base da API externa
-// const BASE_URL = 'https://jsonplaceholder.org/';
+// Rota raiz (home)
+// Objetivo: mensagem amigável + lista das rotas disponíveis
+// GET / -> HTML simples
+app.get("/", (req, res) => {
+  res.status(200).send(`
+    <h1>Minha API está no ar \u2705</h1>
+    <p>Rotas disponíveis:</p>
+    <ul>
+      <li><a href="/health">/health</a></li>
+      <li><a href="/api/posts">/api/posts</a></li>
+    </ul>
+  `);
+});
+// [F6] Rota principal (proxy de posts)
+// [F6.1] Receber requisição do cliente
+// GET /api/posts -> busca posts da API externa e devolve em formato padronizado
+app.get("/api/posts", async (req, res) => {
+  try {
+    // [F6.2] Consumir API externa(chama BASE_URL/posts)
+    const response = await axios.get(`${BASE_URL}/posts`);
 
-// // Rota simples para configurar que o servidor está rodando
-// // GET /health -> retorna {ok: true}
-// app.get("/health", (req, res) => {
-//     res.json({ ok: true });
-// });
-
-// // Rota que lista os posts
-// // GET /api/posts
-// // Get /api/posts?userId=1 (Filtra posts de um usuário)
-// app.get('/api/posts', async (req, res) => {
-//     try {
-//         // Lê o parâmetro da query string (vem como string)
-//         // Se o usuário chamar /api/posts?userId=1, userId será '1' (string)
-//         const { userId } = req.query;
-
-//         // Faz a requisição para a API (BASE_URL/posts)
-//         // params adiciona query string automaticamente
-//         // Se userId existir -> params {userID}
-//         // Se userId não existir -> params {}
-//         const response = await axios.get(`${BASE_URL}posts`, {
-//             params: userId ? { userId } : {} 
-//         });
-
-//         // Retorna 200 OK com um envelope padronizado
-//         // source: indice de onde veio
-//         // count: quantidade de itens
-//         // data: os posts
-//         res.status(200).json({
-//             source: "jsonplaceholder",
-//             count: response.data.length,
-//             data: response.data
-//         })
-//     }
-//         catch (err) {
-//             res.status(502).json({
-//                 message: "Falha ao consumir API externa",
-//                 details: err.message
-//             });
-//         }
-// });
-
-// /*
-// http://localhost:3000/health
-// http://localhost:3000/api/posts
-// */
-
-// app.listen(3000, () => console.log("API proxy rodando em http://localhost:3000"));
+    // [F6.3] Processar resposta da API externa (padronizar dados)
+    // source: identifica a origem dos dados
+    // count: quantidade de itens recebidos
+    // data: lista de posts
+    res.status(200).json({
+        source: "dummy",
+        count: response.data.length,
+        data: response.data
+    });
+  } catch (err) {
+    // [F6.4] Tratamento de falha ao consultar a API externa
+    // 502 Bad Gateway = "meu servidor não conseguiu obter uma resposta válida!"
+    res.status(502).json({
+        message: "Falha ao consultar API externa",
+        detail: err.message
+    });
+  }
+});
+// -------------------------------------------------------
+// [F7] Iniciar servidor (listen)
+// -------------------------------------------------------
+// Sobe o servidor na porta 3000 e imprime uma mensagem no terminal
+app.listen(3001, () => console.log("API proxy rodando em http://localhost:3001"));

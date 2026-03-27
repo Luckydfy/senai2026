@@ -1,0 +1,9 @@
+.header-light {
+    background-color: lightcyan;
+    color: black;
+}
+
+.header-dark {
+    background-color: darkcyan;
+    color: white;
+}
