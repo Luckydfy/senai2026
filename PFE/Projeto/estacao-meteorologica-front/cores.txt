@@ -1,0 +1,5 @@
+color = #dad7cd
+color = #a3b18a
+color = #588157
+color = #3a5a40
+color = #344e41

@@ -1,0 +1,135 @@
+:root {
+  --cor-fundo: #dad7cd;       /* Bege esverdeado claro para o fundo da página */
+  --cor-borda: #a3b18a;       /* Verde claro para bordas dos inputs */
+  --cor-primaria: #588157;    /* Verde médio para botões e links */
+  --cor-hover: #3a5a40;       /* Verde escuro para hover do botão */
+  --cor-texto: #344e41;       /* Verde muito escuro para títulos e textos */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--cor-fundo);
+  padding: 20px;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff; /* Fundo branco para destacar o formulário */
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(52, 78, 65, 0.15); /* Sombra suave usando a cor mais escura */
+  overflow: hidden;
+  max-width: 900px;
+  width: 100%;
+}
+
+.card img {
+  width: 50%;
+  object-fit: cover;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px;
+  width: 50%;
+}
+
+.formulario h2 {
+  color: var(--cor-texto);
+  margin-bottom: 24px;
+  font-size: 2rem;
+}
+
+.formulario form {
+  display: flex;
+  flex-direction: column;
+}
+
+.formulario label {
+  color: var(--cor-texto);
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.input {
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 2px solid var(--cor-borda);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--cor-texto);
+  outline: none;
+  transition: border-color 0.3s ease;
+  background-color: #fafafa;
+}
+
+.input:focus {
+  border-color: var(--cor-primaria);
+}
+
+.botao {
+  background-color: var(--cor-primaria);
+  color: #ffffff;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.botao:hover {
+  background-color: var(--cor-hover);
+}
+
+.botao:active {
+  transform: scale(0.98);
+}
+
+.formulario a {
+  color: var(--cor-primaria);
+  text-decoration: none;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.formulario a:hover {
+  color: var(--cor-hover);
+  text-decoration: underline;
+}
+
+/* Responsividade: Transforma o layout em coluna em telas de celular */
+@media (max-width: 768px) {
+  .card {
+    flex-direction: column;
+    max-width: 450px;
+  }
+  
+  .card img {
+    width: 100%;
+    height: 250px; /* Define uma altura fixa para a imagem no mobile */
+  }
+  
+  .formulario {
+    width: 100%;
+    padding: 30px;
+  }
+}
