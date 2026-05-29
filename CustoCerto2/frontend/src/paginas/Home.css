@@ -1,0 +1,95 @@
+/* Definições de Variáveis com as suas Cores */
+:root {
+  --primary-dark: #16697a;
+  --primary-light: #489fb5;
+  --accent-blue: #82c0cc;
+  --bg-neutral: #ede7e3;
+  --highlight-orange: #ffa62b;
+}
+
+/* Container Principal da Página */
+.home-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(22, 105, 122, 0.08);
+}
+
+/* Cabeçalho */
+.home-title {
+  color: var(--primary-dark);
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 3px solid var(--accent-blue);
+  padding-bottom: 10px;
+}
+
+/* Navegação e Botão de Cadastro */
+.home-nav {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+}
+
+.btn-cadastro {
+  background-color: var(--highlight-orange);
+  color: #ffffff;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+}
+
+.btn-cadastro:hover {
+  background-color: #e59320; /* Tom de laranja ligeiramente mais escuro */
+  transform: translateY(-1px);
+}
+
+/* Lista de Usuários */
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Itens da Lista (Cards individuais para cada usuário) */
+.user-item {
+  background-color: var(--bg-neutral);
+  padding: 16px;
+  border-left: 5px solid var(--primary-light);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.user-item:hover {
+  transform: translateX(4px);
+  background-color: #e3dbd5; /* Leve escurecida no hover do card */
+}
+
+/* Detalhes do Usuário dentro do item */
+.user-info strong {
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+}
+
+.user-info span {
+  color: #555555;
+  margin-left: 8px;
+}
+
+/* Mensagem de Lista Vazia */
+.empty-message {
+  text-align: center;
+  color: #777777;
+  font-style: italic;
+  padding: 20px;
+}
