@@ -1,0 +1,86 @@
+### Configuração de variáveis locais
+@baseUrl = http://localhost:3000
+
+### 1. Rota Raiz
+GET {{baseUrl}}/
+Content-Type: application/json
+
+### 2. Rota Resumo da API
+GET {{baseUrl}}/api
+Content-Type: application/json
+
+### 3. Rota de Health Check
+GET {{baseUrl}}/api/health
+Content-Type: application/json
+
+### 4. Listar Leituras com Paginação Padrão
+GET {{baseUrl}}/api/leituras?page=1&limit=5
+Content-Type: application/json
+
+### 5. Filtrar Leituras por Estação
+GET {{baseUrl}}/api/leituras?station_id=EM-ARACATUBA-01&page=1&limit=10
+Content-Type: application/json
+
+### 6. Filtrar Leituras por Período de Datas
+GET {{baseUrl}}/api/leituras?data_inicio=2026-01-01&data_fim=2026-01-03&page=1&limit=20
+Content-Type: application/json
+
+### 7. Buscar Leitura por ID Existente
+GET {{baseUrl}}/api/leituras/1
+Content-Type: application/json
+
+### 8. Criar Nova Leitura (Sucesso)
+POST {{baseUrl}}/api/leituras
+Content-Type: application/json
+
+{
+  "station_id": "EM-TESTE-01",
+  "timestamp": "2026-06-01T08:00:00-03:00",
+  "temperature_c": 26.7,
+  "humidity_pct": 72.4
+}
+
+### 9. Criar Nova Leitura com Vírgula nos Números (Sucesso)
+POST {{baseUrl}}/api/leituras
+Content-Type: application/json
+
+{
+  "station_id": "EM-TESTE-02",
+  "timestamp": "2026-06-01T09:30:00-03:00",
+  "temperature_c": "28,5",
+  "humidity_pct": "65,2"
+}
+
+### 10. Criar Nova Leitura (Erro de Validação de Umidade)
+POST {{baseUrl}}/api/leituras
+Content-Type: application/json
+
+{
+  "station_id": "EM-ERRO-01",
+  "timestamp": "2026-06-01T08:00:00-03:00",
+  "temperature_c": 25.0,
+  "humidity_pct": 120.5
+}
+
+### 11. Atualizar Leitura Existente
+PUT {{baseUrl}}/api/leituras/1
+Content-Type: application/json
+
+{
+  "station_id": "EM-ARACATUBA-01-MOD",
+  "timestamp": "2026-01-01T09:00:00.000Z",
+  "temperature_c": 29.1,
+  "humidity_pct": 58.4
+}
+
+### 12. Deletar uma Leitura Específica por ID
+DELETE {{baseUrl}}/api/leituras/1
+Content-Type: application/json
+
+### 13. Deletar Todas as Leituras (Operação de Laboratório)
+DELETE {{baseUrl}}/api/leituras
+Content-Type: application/json
+
+### 14. Testar Rota Inexistente (404 Centralizado)
+GET {{baseUrl}}/api/rota-que-nao-existe
+Content-Type: application/json

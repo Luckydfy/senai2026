@@ -1,0 +1,36 @@
+{
+  "name": "backend-base-em",
+  "version": "1.0.0",
+  "description": "API RESTful profissional para monitoramento de leituras ambientais usando arquitetura em n-camadas.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "import:csv": "node src/scripts/importCsv.js",
+    "import:csv:clear": "node src/scripts/importCsv.js --clear",
+    "reset:leituras": "node src/scripts/resetLeituras.js",
+    "test:api": "node src/scripts/testApiAxios.js"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "postgresql",
+    "sequelize",
+    "n-layers",
+    "api"
+  ],
+  "author": "Senior Back-end Developer",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "axios": "^1.7.2",
+    "nodemon": "^3.1.3"
+  }
+}
