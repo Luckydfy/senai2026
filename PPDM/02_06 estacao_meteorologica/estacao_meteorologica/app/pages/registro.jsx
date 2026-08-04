@@ -10,21 +10,30 @@ export default function Registro({ navigation }) {
   const [senha, setSenha] = useState('');
   const [confSenha, setConfSenha] = useState('');
 
+  const exibirAlerta = (titulo, mensagem) => {
+    // Se for Web usa o alert nativo do navegador, se for Mobile usa o componente Alert
+    if (Platform.OS === 'web') {
+      alert(`${titulo}: ${mensagem}`);
+    } else {
+      Alert.alert(titulo, mensagem);
+    }
+  };
+
   const handleCadastro = () => {
     // Validação simples de preenchimento
     if (!email || !senha || !confSenha) {
-      alert('Por favor, preencha todos os campos.');
+      exibirAlerta('Atenção', 'Por favor, preencha todos os campos.');
       return;
     }
 
     // Validação se as senhas coincidem
     if (senha !== confSenha) {
-      alert('As senhas não coincidem!');
+      exibirAlerta('Erro', 'As senhas não coincidem!');
       return;
     }
 
     // Se tudo estiver certo, navega para a tela principal (Dashboard)
-    alert('Cadastro realizado com sucesso!');
+    exibirAlerta('Sucesso', 'Cadastro realizado com sucesso!');
     navigation.replace('Principal'); 
   };
 
@@ -73,16 +82,17 @@ export default function Registro({ navigation }) {
 
           <TouchableOpacity
             style={styles.btnRegister}
-            onPress={handleCadastro} // Mudou para a função de validação
+            onPress={handleCadastro}
           >
             <Text style={styles.btnRegisterText}>Cadastrar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.btnBack}
-            onPress={() => navigation.replace('Principal')} // Redirecionando para a rota existente
+            // CORREÇÃO: Volta para a tela de Login caso o usuário desista do cadastro
+            onPress={() => navigation.navigate('Login')} 
           >
-            <Text style={styles.btnBackText}>Voltar para o Início</Text>
+            <Text style={styles.btnBackText}>Voltar para o Login</Text>
           </TouchableOpacity>
 
         </View>
@@ -124,6 +134,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 24,
+    // Adicionado boxShadow para manter o padrão visual moderno na Web e Mobile
+    boxShadow: '0px 4px 12px rgba(2, 132, 199, 0.08)',
+    elevation: 4,
   },
   label: {
     fontSize: 12,

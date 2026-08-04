@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
   View, Text, TextInput, StyleSheet,
-  TouchableOpacity, Image, SafeAreaView, StatusBar
+  TouchableOpacity, Image, SafeAreaView
 } from 'react-native';
 import Logo from '../../assets/estacao.jpg';
 
@@ -11,21 +11,20 @@ export default function Login({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#E0F2FE" />
       <View style={styles.inner}>
 
         <View style={styles.logoWrapper}>
           <Image source={Logo} style={styles.logo} />
         </View>
 
-        <Text style={styles.title}>Bem-vindo</Text>
+        <Text style={styles.title}>Login</Text>
 
         <View style={styles.card}>
           <Text style={styles.label}>E-MAIL</Text>
           <TextInput
             style={styles.input}
             placeholder="seu@email.com"
-            placeholderTextColor="#94A3B8"
+            placeholderTextColor="#185FA5"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -36,7 +35,7 @@ export default function Login({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="••••••••"
-            placeholderTextColor="#94A3B8"
+            placeholderTextColor="#185FA5"
             value={senha}
             onChangeText={setSenha}
             secureTextEntry
@@ -56,10 +55,11 @@ export default function Login({ navigation }) {
           </View>
 
           <TouchableOpacity
-            style={styles.btnRegister}
-            onPress={() => navigation.navigate('Cadastro')}
+            style={styles.btnLogin}
+            // Tente usar apenas o navigate se o replace estiver quebrando a URL na Web
+            onPress={() => navigation.navigate('Principal')}
           >
-            <Text style={styles.btnRegisterText}>Criar uma conta</Text>
+            <Text style={styles.btnLoginText}>Entrar</Text>
           </TouchableOpacity>
         </View>
 
@@ -97,13 +97,11 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   card: {
-    backgroundColor: '#FFFFFF', // Branco nuvem
+    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 24,
-    shadowColor: '#0284C7',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
+    // Altere as linhas de shadow antigas por essa:
+    boxShadow: '0px 4px 12px rgba(2, 132, 199, 0.1)', 
     elevation: 4,
   },
   label: {

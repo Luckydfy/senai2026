@@ -7,10 +7,13 @@ import Login from '../pages/login';
 import Registro from '../pages/registro';
 import Cadastro from '../pages/cadastro';
 import Dashboard from '../pages/dashboard';
+import Relatorio from '../pages/relatorio';
+
 
 //import dos navegadores
 const Stack = createStackNavigator();
 const Draw = createDrawerNavigator();
+
 
 function MenuSuperior() {
     return (
@@ -22,9 +25,10 @@ function MenuSuperior() {
                 drawerIcon: ({ color, size, focused }) => {
                     let nomeIcone = 'menu-outline';
 
-                    if (route.name === 'Início') {
+                    if (route.name === 'Home') {
                         nomeIcone = focused ? 'audit' : 'audit-outline';
                     }
+
                     if (route.name === 'Registro') {
                         nomeIcone = focused ? 'file-add' : 'file-add-outline'
                     }
@@ -36,6 +40,7 @@ function MenuSuperior() {
             })}
         > 
             <Draw.Screen name='Home' component={Dashboard} options={{headerTitleAlign: 'center'}} />
+            <Draw.Screen name='Relatório' component={Relatorio} />
             <Draw.Screen name='Cadastro' component={Cadastro} />
             {/* <Draw.Screen name='Profissionais' component={Profissionais} /> */}
         </Draw.Navigator>
@@ -45,7 +50,7 @@ function MenuSuperior() {
 export default function Rotas() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name='Home' component={Dashboard} options={{ headerShown: false }} />
+            <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
             <Stack.Screen name='Registro' component={Registro} options={{ title: 'Cadastro de usuário', headerShown: false }} />
             <Stack.Screen name='Cadastro' component={Cadastro} options={{ title: 'Cadastro de usuário', headerShown: false }} />
             <Stack.Screen name='Principal' component={MenuSuperior} options={{ headerShown: false , title: ''}} />
