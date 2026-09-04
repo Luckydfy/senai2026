@@ -1,4 +1,4 @@
-import Header from "../componentes/header";
+import Header from "../components/header";
 
 export default function Principal() {
   return (

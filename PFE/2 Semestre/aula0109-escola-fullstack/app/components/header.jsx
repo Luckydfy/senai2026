@@ -13,6 +13,25 @@ export default function Header() {
       gap: "15px",
       boxShadow: "0 2px 8px rgba(0,0,0,0.2)"
     }}>
+      {/* Classe CSS para criar o efeito hover nos links */}
+      <style>{`
+        .nav-link {
+          color: #FFF;
+          text-decoration: none;
+          font-weight: bold;
+          font-size: 0.95rem;
+          padding: 6px 12px;
+          border-radius: 4px;
+          background-color: rgba(255, 255, 255, 0.15);
+          transition: all 0.2s ease-in-out;
+        }
+
+        .nav-link:hover {
+          background-color: #FFF;
+          color: #D32F2F;
+        }
+      `}</style>
+
       <h1 style={{ margin: 0, fontSize: "1.4rem", fontWeight: "bold" }}>
         Sistema Escolar - SESI
       </h1>
@@ -27,34 +46,22 @@ export default function Header() {
           flexWrap: "wrap"
         }}>
           <li>
-            <Link href="/" style={linkStyle}>Início</Link>
+            <Link href="/" className="nav-link">Início</Link>
           </li>
           <li>
-            <Link href="/cadalunos" style={linkStyle}>Cadastro - Alunos</Link>
+            <Link href="/cadalunos" className="nav-link">Cadastro - Alunos</Link>
           </li>
           <li>
-            <Link href="/listalunos" style={linkStyle}>Lista - Alunos</Link>
+            <Link href="/listalunos" className="nav-link">Lista - Alunos</Link>
           </li>
           <li>
-            <Link href="/cadnotas" style={linkStyle}>Cadastro - Notas</Link>
+            <Link href="/cadnotas" className="nav-link">Cadastro - Notas</Link>
           </li>
           <li>
-            <Link href="/listnotas" style={linkStyle}>Lista - Notas</Link>
+            <Link href="/listnotas" className="nav-link">Lista - Notas</Link>
           </li>
         </ul>
       </nav>
     </header>
   );
 }
-
-// Estilo reutilizável para os links
-const linkStyle = {
-  color: "#FFF",
-  textDecoration: "none",
-  fontWeight: "bold",
-  fontSize: "0.95rem",
-  padding: "6px 12px",
-  borderRadius: "4px",
-  backgroundColor: "rgba(255, 255, 255, 0.15)",
-  transition: "background 0.2s"
-};
