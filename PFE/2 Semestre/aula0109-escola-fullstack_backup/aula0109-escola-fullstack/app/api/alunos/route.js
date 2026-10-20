@@ -1,93 +1,75 @@
 import db from "../../db/banco";
 import { NextResponse } from "next/server";
 
-// GET - Listar todos os alunos
 export async function GET() {
     try {
-        const alunos = db.prepare('SELECT * FROM alunos ORDER BY nome').all();
+        const alunos = db.prepare('SELECT * FROM alunos ORDER BY id_aluno DESC').all();
         return NextResponse.json(alunos);
     } catch (error) {
-        console.error('Erro ao listar alunos:', error);
-        return NextResponse.json({ error: 'Erro ao buscar alunos.' }, { status: 500 });
+        console.error('Erro ao buscar alunos: ', error);
+        return NextResponse.json({ erro: "Erro ao buscar alunos." }, { status: 500 });
     }
 }
 
-// POST - Criar um novo aluno
 export async function POST(request) {
     try {
         const dados = await request.json();
+        const sql = db.prepare(`INSERT INTO alunos (nome, idade, serie, ra) VALUES (?, ?, ?, ?)`);
         
-        if (!dados.nome || !dados.ra) {
-            return NextResponse.json({ error: 'Campos obrigatórios ausentes.' }, { status: 400 });
-        }
-
-        const sql = db.prepare('INSERT INTO alunos (nome, idade, serie, ra) VALUES (?, ?, ?, ?)');
-        const resultado = sql.run(
+        sql.run(
             dados.nome,
             dados.idade,
             dados.serie,
             dados.ra
         );
 
-        return NextResponse.json({ 
-            message: 'Aluno salvo com sucesso!',
-            id: resultado.lastInsertRowid 
+        return NextResponse.json({
+            mensagem: 'Aluno salvo com sucesso!'
         }, { status: 201 });
     } catch (error) {
-        console.error('Erro ao salvar aluno:', error);
-        return NextResponse.json({ error: 'Erro ao salvar aluno.' }, { status: 500 });
+        console.error('Erro ao salvar aluno: ', error);
+        return NextResponse.json({ erro: "Erro ao salvar aluno no banco." }, { status: 500 });
     }
 }
 
-// PUT - Editar dados de um aluno existente
 export async function PUT(request) {
     try {
         const dados = await request.json();
+        const sql = db.prepare(`
+            UPDATE alunos
+            SET nome = ?, idade = ?, serie = ?, ra = ?
+            WHERE id_aluno = ?
+        `);
 
-        if (!dados.id) {
-            return NextResponse.json({ error: 'ID do aluno é obrigatório para atualização.' }, { status: 400 });
-        }
-
-        const sql = db.prepare('UPDATE alunos SET nome = ?, idade = ?, serie = ?, ra = ? WHERE id = ?');
-        const resultado = sql.run(
-            dados.nome,
-            dados.idade,
-            dados.serie,
-            dados.ra,
-            dados.id
+        sql.run(
+            dados.nome, 
+            dados.idade, 
+            dados.serie, 
+            dados.ra, 
+            dados.id_aluno
         );
 
-        if (resultado.changes === 0) {
-            return NextResponse.json({ error: 'Aluno não encontrado.' }, { status: 404 });
-        }
-
-        return NextResponse.json({ message: 'Aluno atualizado com sucesso!' });
-    } catch (error) {
-        console.error('Erro ao editar aluno:', error);
-        return NextResponse.json({ error: 'Erro ao atualizar aluno.' }, { status: 500 });
+        return NextResponse.json({
+            mensagem: "Aluno atualizado com sucesso!"
+        });
+    } catch (erro) {
+        console.error('Erro ao editar o aluno: ', erro);
+        return NextResponse.json({ erro: "Erro ao editar o aluno." }, { status: 500 });
     }
 }
 
-// DELETE - Remover um aluno
 export async function DELETE(request) {
     try {
-        const { searchParams } = new URL(request.url);
-        const id = searchParams.get('id');
+        const dados = await request.json();
+        const sql = db.prepare(`DELETE FROM alunos WHERE id_aluno = ?`);
+        
+        sql.run(dados.id_aluno);
 
-        if (!id) {
-            return NextResponse.json({ error: 'ID do aluno é obrigatório para remoção.' }, { status: 400 });
-        }
-
-        const sql = db.prepare('DELETE FROM alunos WHERE id = ?');
-        const resultado = sql.run(id);
-
-        if (resultado.changes === 0) {
-            return NextResponse.json({ error: 'Aluno não encontrado.' }, { status: 404 });
-        }
-
-        return NextResponse.json({ message: 'Aluno excluído com sucesso!' });
+        return NextResponse.json({
+            mensagem: "Aluno excluído com sucesso!"
+        });
     } catch (error) {
-        console.error('Erro ao excluir aluno:', error);
-        return NextResponse.json({ error: 'Erro ao excluir aluno.' }, { status: 500 });
+        console.error('Erro ao excluir o aluno: ', error);
+        return NextResponse.json({ erro: "Erro ao excluir o aluno." }, { status: 500 });
     }
 }

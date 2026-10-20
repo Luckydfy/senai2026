@@ -1,33 +1,44 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import Header from "../components/header";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function ListAlunos() {
   const [alunos, setAlunos] = useState([]);
-  const [carregando, setCarregando] = useState(true);
+  const router = useRouter();
 
-  // Função para buscar os alunos cadastrados na API
-  async function carregarAlunos() {
-    try {
-      const resposta = await fetch("/api/alunos");
-      if (resposta.ok) {
-        const dados = await resposta.json();
-        setAlunos(dados);
-      } else {
-        alert("Erro ao carregar a lista de alunos.");
-      }
-    } catch (error) {
-      console.error("Erro na busca:", error);
-    } finally {
-      setCarregando(false);
-    }
+  useEffect(() => {
+    buscarAlunos()
+  }, [])//toda vez que a tela for recarregada
+
+  async function buscarAlunos() {
+    const resposta = await fetch('/api/alunos');
+    const dados = await resposta.json();
+
+    setAlunos(dados);
   }
 
-  // Executa o carregarAlunos assim que a página abre
-  useEffect(() => {
-    carregarAlunos();
-  }, []);
+  function editarAlunos(id) {
+    router.push(`/editalunos/${id}`)
+  }
+
+  async function excluirAluno(event){
+    event.preventDefault();
+    if(!confirm('Deseja realmente excluir este aluno?'))return;
+    const resposta = await fetch("/api/alunos",{
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id_aluno: event.target.dataset.id
+      })
+    })
+    const dados = await resposta.json();
+    alert(dados.mensagem || dados.erro)
+    buscarAlunos();
+  }
 
   return (
     <div style={{ backgroundColor: "#F9F9F9", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
@@ -51,11 +62,6 @@ export default function ListAlunos() {
           overflowX: "auto",
           padding: "20px"
         }}>
-          {carregando ? (
-            <p style={{ textAlign: "center", color: "#666" }}>Carregando alunos...</p>
-          ) : alunos.length === 0 ? (
-            <p style={{ textAlign: "center", color: "#666" }}>Nenhum aluno cadastrado ainda.</p>
-          ) : (
             <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
               <thead>
                 <tr style={{ borderBottom: "2px solid #D32F2F" }}>
@@ -69,21 +75,20 @@ export default function ListAlunos() {
               </thead>
               <tbody>
                 {alunos.map((aluno) => (
-                  <tr key={aluno.id || aluno.ra} style={{ borderBottom: "1px solid #EEE" }}>
-                    <td style={tdStyle}>{aluno.id}</td>
+                  <tr key={aluno.id_aluno} style={{ borderBottom: "1px solid #EEE" }}>
+                    <td style={tdStyle}>{aluno.id_aluno}</td>
                     <td style={{ ...tdStyle, fontWeight: "bold", color: "#222" }}>{aluno.nome}</td>
                     <td style={tdStyle}>{aluno.idade}</td>
                     <td style={tdStyle}>{aluno.serie}</td>
                     <td style={tdStyle}>{aluno.ra}</td>
                     <td style={{ ...tdStyle, textAlign: "center", display: "flex", gap: "8px", justifyContent: "center" }}>
-                      <button style={btnEditarStyle}>Editar</button>
-                      <button style={btnDeletarStyle}>Deletar</button>
+                      <button style={btnEditarStyle} onClick={() => editarAlunos(aluno.id_aluno)}>Editar</button>
+                      <button style={btnDeletarStyle} onClick={(e) => excluirAluno(e)} data-id={aluno.id_aluno}>Excluir</button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          )}
         </div>
       </main>
     </div>

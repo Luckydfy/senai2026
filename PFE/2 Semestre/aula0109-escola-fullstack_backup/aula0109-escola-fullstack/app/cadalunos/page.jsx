@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Header from "../components/header";
+import { redirect } from 'next/navigation';
 
 export default function CadAlunos() {
   const [nome, setNome] = useState('');
@@ -9,35 +10,24 @@ export default function CadAlunos() {
   const [serie, setSerie] = useState('');
   const [ra, setRa] = useState('');
 
-  async function cadastrarAluno(event) {
+  async function cadastrarAluno(event){
     event.preventDefault();
-
-    try {
-      const resposta = await fetch("/api/alunos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+    const resposta = await fetch("/api/alunos",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
         body: JSON.stringify({
-          nome,
-          idade,
-          serie,
-          ra
-        })
-      });
-
-      const dados = await resposta.json();
-      alert(dados.mensagem || dados.erro || "Operação realizada!");
-
-      if (resposta.ok) {
-        setNome('');
-        setIdade('');
-        setSerie('');
-        setRa('');
-      }
-    } catch (error) {
-      console.error("Erro no cadastro:", error);
-      alert("Erro ao conectar com o servidor.");
+        nome,
+        idade,
+        serie,
+        ra
+      })
+    })
+    const dados = await resposta.json();
+    alert(dados.mensagem || dados.erro)
+    if(resposta.ok){
+        redirect('/listalunos')
     }
   }
 
@@ -75,7 +65,6 @@ export default function CadAlunos() {
               type="text" 
               value={nome} 
               onChange={(e) => setNome(e.target.value)} 
-              placeholder="Digite o nome do aluno"
               style={inputStyle} 
               required
             />
@@ -88,7 +77,6 @@ export default function CadAlunos() {
               type="number" 
               value={idade} 
               onChange={(e) => setIdade(e.target.value)} 
-              placeholder="Ex: 12"
               style={inputStyle} 
               required
             />
@@ -101,7 +89,6 @@ export default function CadAlunos() {
               type="text" 
               value={serie} 
               onChange={(e) => setSerie(e.target.value)} 
-              placeholder="Ex: 7º Ano A"
               style={inputStyle} 
               required
             />
@@ -114,7 +101,6 @@ export default function CadAlunos() {
               type="number" 
               value={ra} 
               onChange={(e) => setRa(e.target.value)} 
-              placeholder="Digite o número do RA"
               style={inputStyle} 
               required
             />

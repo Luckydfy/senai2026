@@ -1,19 +1,51 @@
 'use client';
+
 import { useState } from 'react';
 import Header from '../components/header';
 
 export default function CadNotas() {
-    const [nome, setNome] = useState('');
-    const [t1, setT1] = useState('');
-    const [t2, setT2] = useState('');
-    const [nota1, setNota1] = useState('');
-    const [nota2, setNota2] = useState('');
-    const [nota3, setNota3] = useState('');
+    const [id_aluno, setIdAluno] = useState('');
+    const [t1, sett1] = useState('');
+    const [t2, sett2] = useState('');
+    const [n1, setn1] = useState('');
+    const [n2, setn2] = useState('');
+    const [n3, setn3] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Lógica de salvamento aqui
-    };
+    async function cadastrarNotas(event) {
+        event.preventDefault();
+
+        try {
+            const resposta = await fetch("/api/notas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id_aluno,
+                    t1,
+                    t2,
+                    n1,
+                    n2,
+                    n3
+                })
+            });
+
+            const dados = await resposta.json();
+            alert(dados.mensagem || dados.erro || "Operação realizada!");
+
+            if (resposta.ok) {
+                setIdAluno('');
+                sett1('');
+                sett2('');
+                setn1('');
+                setn2('');
+                setn3('');
+            }
+        } catch (error) {
+            console.error("Erro ao cadastrar notas:", error);
+            alert("Erro ao conectar com o servidor.");
+        }
+    }
 
     return (
         <div style={{ backgroundColor: "#F9F9F9", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
@@ -30,7 +62,7 @@ export default function CadNotas() {
             {/* Conteúdo do Formulário */}
             <main style={{ maxWidth: "500px", margin: "40px auto", padding: "0 20px" }}>
                 <form 
-                    onSubmit={handleSubmit}
+                    onSubmit={cadastrarNotas}
                     style={{
                         backgroundColor: "#FFF",
                         padding: "30px",
@@ -43,74 +75,79 @@ export default function CadNotas() {
                     }}
                 >
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                        <label htmlFor="nome" style={labelStyle}>Nome Completo</label>
-                        <input 
-                            id="nome"
-                            type="text" 
-                            value={nome} 
-                            onChange={(e) => setNome(e.target.value)} 
-                            placeholder="Digite o nome do aluno"
-                            style={inputStyle} 
+                        <label htmlFor="id_aluno" style={labelStyle}>ID do Aluno</label>
+                        <input
+                            id="id_aluno"
+                            type="text"
+                            value={id_aluno}
+                            onChange={(e) => setIdAluno(e.target.value)}
+                            style={inputStyle}
+                            required
                         />
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                         <label htmlFor="t1" style={labelStyle}>Trabalho 1</label>
-                        <input 
+                        <input
                             id="t1"
-                            type="number" 
-                            value={t1} 
-                            onChange={(e) => setT1(e.target.value)} 
-                            placeholder="Digite a nota do Trabalho 1"
-                            style={inputStyle} 
+                            type="number"
+                            step="0.1"
+                            value={t1}
+                            onChange={(e) => sett1(e.target.value)}
+                            style={inputStyle}
+                            required
                         />
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                         <label htmlFor="t2" style={labelStyle}>Trabalho 2</label>
-                        <input 
+                        <input
                             id="t2"
-                            type="number" 
-                            value={t2} 
-                            onChange={(e) => setT2(e.target.value)} 
-                            placeholder="Digite a nota do Trabalho 2"
-                            style={inputStyle} 
+                            type="number"
+                            step="0.1"
+                            value={t2}
+                            onChange={(e) => sett2(e.target.value)}
+                            style={inputStyle}
+                            required
                         />
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                        <label htmlFor="nota1" style={labelStyle}>Nota 1 (Avaliação)</label>
-                        <input 
-                            id="nota1"
-                            type="number" 
-                            value={nota1} 
-                            onChange={(e) => setNota1(e.target.value)} 
-                            placeholder="Digite a Nota 1"
-                            style={inputStyle} 
+                        <label htmlFor="n1" style={labelStyle}>Nota 1</label>
+                        <input
+                            id="n1"
+                            type="number"
+                            step="0.1"
+                            value={n1}
+                            onChange={(e) => setn1(e.target.value)}
+                            style={inputStyle}
+                            required
                         />
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                        <label htmlFor="nota2" style={labelStyle}>Nota 2 (Avaliação)</label>
-                        <input 
-                            id="nota2"
-                            type="number" 
-                            value={nota2} 
-                            onChange={(e) => setNota2(e.target.value)} 
-                            placeholder="Digite a Nota 2"
-                            style={inputStyle} 
+                        <label htmlFor="n2" style={labelStyle}>Nota 2</label>
+                        <input
+                            id="n2"
+                            type="number"
+                            step="0.1"
+                            value={n2}
+                            onChange={(e) => setn2(e.target.value)}
+                            style={inputStyle}
+                            required
                         />
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                        <label htmlFor="nota3" style={labelStyle}>Nota 3 (Avaliação)</label>
-                        <input 
-                            id="nota3"
-                            type="number" 
-                            value={nota3} 
-                            onChange={(e) => setNota3(e.target.value)} 
-                            placeholder="Digite a Nota 3"
-                            style={inputStyle} 
+                        <label htmlFor="n3" style={labelStyle}>Nota 3</label>
+                        <input
+                            id="n3"
+                            type="number"
+                            step="0.1"
+                            value={n3}
+                            onChange={(e) => setn3(e.target.value)}
+                            style={inputStyle}
+                            required
                         />
                     </div>
 
