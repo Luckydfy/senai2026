@@ -1,32 +1,48 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import Header from "../components/header";
+import { useRouter } from 'next/navigation';
 
 export default function ListNotas() {
-  const [listaNotas, setListaNotas] = useState([]);
-  const [carregando, setCarregando] = useState(true);
-
-  async function carregarNotas() {
-    try {
-      setCarregando(true);
-      const resposta = await fetch("/api/notas");
-      if (resposta.ok) {
-        const dados = await resposta.json();
-        setListaNotas(dados);
-      } else {
-        alert("Erro ao buscar a lista de notas.");
-      }
-    } catch (error) {
-      console.error("Erro ao carregar notas:", error);
-    } finally {
-      setCarregando(false);
-    }
-  }
+  const [notas, setNotas] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
-    carregarNotas();
-  }, []);
+    buscarNotas()
+  }, [])//toda vez que a tela for recarregada
+
+  async function buscarNotas() {
+    const resposta = await fetch('/api/notas');
+    const dados = await resposta.json();
+
+    setNotas(dados);
+  }
+
+  function editarNota(id_nota) {
+    router.push(`/editnotas/${id_nota}`);
+  }
+
+  async function excluirNota(event) {
+    event.preventDefault();
+    if (!confirm("Deseja realmente excluir esta nota?")) {
+      return;
+    }
+    const resposta = await fetch("/api/notas", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id_notas: event.target.dataset.id,
+      }),
+    });
+
+    const dados = await resposta.json();
+
+    alert(dados.mensagem || dados.erro);
+
+    buscarNotas();
+  }
 
   return (
     <div style={{ backgroundColor: "#F9F9F9", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
@@ -48,43 +64,41 @@ export default function ListNotas() {
           overflowX: "auto",
           padding: "20px"
         }}>
-          {carregando ? (
-            <p style={{ textAlign: "center", color: "#666" }}>Carregando notas...</p>
-          ) : listaNotas.length === 0 ? (
-            <p style={{ textAlign: "center", color: "#666" }}>Nenhuma nota cadastrada até o momento.</p>
-          ) : (
-            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-              <thead>
-                <tr style={{ borderBottom: "2px solid #D32F2F" }}>
-                  <th style={thStyle}>Aluno</th>
-                  <th style={thStyle}>RA</th>
-                  <th style={thStyle}>T1</th>
-                  <th style={thStyle}>T2</th>
-                  <th style={thStyle}>N1</th>
-                  <th style={thStyle}>N2</th>
-                  <th style={thStyle}>N3</th>
-                  <th style={{ ...thStyle, textAlign: "center" }}>Ações</th>
+          <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+            <thead>
+              <tr style={{ borderBottom: "2px solid #D32F2F" }}>
+                <th style={thStyle}>Aluno</th>
+                <th style={thStyle}>RA</th>
+                <th style={thStyle}>T1</th>
+                <th style={thStyle}>T2</th>
+                <th style={thStyle}>N1</th>
+                <th style={thStyle}>N2</th>
+                <th style={thStyle}>N3</th>
+                <th style={{ ...thStyle, textAlign: "center" }}>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {notas ? (notas.map((nota) => (
+                <tr key={nota.id_notas} style={{ borderBottom: "1px solid #EEE" }}>
+                  <td style={{ ...tdStyle, fontWeight: "bold", color: "#222" }}>{nota.id_notas}</td>
+                  <td style={tdStyle}>{nota.nome}</td>
+                  <td style={tdStyle}>{nota.t1}</td>
+                  <td style={tdStyle}>{nota.t2}</td>
+                  <td style={tdStyle}>{nota.n1}</td>
+                  <td style={tdStyle}>{nota.n2}</td>
+                  <td style={tdStyle}>{nota.n3}</td>
+                  <td style={{ ...tdStyle, textAlign: "center", display: "flex", gap: "8px", justifyContent: "center" }}>
+                    <button style={btnEditarStyle} onClick={() => editarNota(nota.id_notas)}>Editar</button>
+                    <button style={btnDeletarStyle} onClick={(e) => excluirNota(e)} data-id={nota.id_notas}>Excluir</button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {listaNotas.map((item, index) => (
-                  <tr key={item.id || index} style={{ borderBottom: "1px solid #EEE" }}>
-                    <td style={{ ...tdStyle, fontWeight: "bold", color: "#222" }}>{item.nome}</td>
-                    <td style={tdStyle}>{item.ra}</td>
-                    <td style={tdStyle}>{item.t1}</td>
-                    <td style={tdStyle}>{item.t2}</td>
-                    <td style={tdStyle}>{item.n1}</td>
-                    <td style={tdStyle}>{item.n2}</td>
-                    <td style={tdStyle}>{item.n3}</td>
-                    <td style={{ ...tdStyle, textAlign: "center", display: "flex", gap: "8px", justifyContent: "center" }}>
-                      <button style={btnEditarStyle}>Editar</button>
-                      <button style={btnDeletarStyle}>Deletar</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+              ))) : (
+                <tr>
+                  <td colSpan="6">Nenhuma rota encontrada</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </main>
     </div>

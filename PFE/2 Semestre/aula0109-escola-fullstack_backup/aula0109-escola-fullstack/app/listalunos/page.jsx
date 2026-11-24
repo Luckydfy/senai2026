@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Header from "../components/header";
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function ListAlunos() {
@@ -19,7 +18,7 @@ export default function ListAlunos() {
     setAlunos(dados);
   }
 
-  function editarAlunos(id) {
+  function editarAluno(id) {
     router.push(`/editalunos/${id}`)
   }
 
@@ -82,7 +81,7 @@ export default function ListAlunos() {
                     <td style={tdStyle}>{aluno.serie}</td>
                     <td style={tdStyle}>{aluno.ra}</td>
                     <td style={{ ...tdStyle, textAlign: "center", display: "flex", gap: "8px", justifyContent: "center" }}>
-                      <button style={btnEditarStyle} onClick={() => editarAlunos(aluno.id_aluno)}>Editar</button>
+                      <button style={btnEditarStyle} onClick={() => editarAluno(aluno.id_aluno)}>Editar</button>
                       <button style={btnDeletarStyle} onClick={(e) => excluirAluno(e)} data-id={aluno.id_aluno}>Excluir</button>
                     </td>
                   </tr>

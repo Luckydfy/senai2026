@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 import Header from '../components/header';
+import { redirect } from "next/navigation";
 
 export default function CadNotas() {
     const [id_aluno, setIdAluno] = useState('');
@@ -10,40 +11,38 @@ export default function CadNotas() {
     const [n1, setn1] = useState('');
     const [n2, setn2] = useState('');
     const [n3, setn3] = useState('');
+    const [alunos, setAlunos] = useState([])
 
-    async function cadastrarNotas(event) {
+    useEffect(() => {
+        buscarAlunos();
+    }, []);
+
+    async function buscarAlunos() {
+        const resposta = await fetch("/api/alunos");
+        const dados = await resposta.json();
+        setAlunos(dados);
+    }
+
+    async function cadastrarNota(event) {
         event.preventDefault();
-
-        try {
-            const resposta = await fetch("/api/notas", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    id_aluno,
-                    t1,
-                    t2,
-                    n1,
-                    n2,
-                    n3
-                })
-            });
-
-            const dados = await resposta.json();
-            alert(dados.mensagem || dados.erro || "Operação realizada!");
-
-            if (resposta.ok) {
-                setIdAluno('');
-                sett1('');
-                sett2('');
-                setn1('');
-                setn2('');
-                setn3('');
-            }
-        } catch (error) {
-            console.error("Erro ao cadastrar notas:", error);
-            alert("Erro ao conectar com o servidor.");
+        const resposta = await fetch("/api/notas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id_aluno,
+                t1,
+                t2,
+                n1,
+                n2,
+                n3
+            })
+        })
+        const dados = await resposta.json();
+        alert(dados.mensagem || dados.erro)
+        if (resposta.ok) {
+            redirect("/listnotas")
         }
     }
 
@@ -62,7 +61,7 @@ export default function CadNotas() {
             {/* Conteúdo do Formulário */}
             <main style={{ maxWidth: "500px", margin: "40px auto", padding: "0 20px" }}>
                 <form 
-                    onSubmit={cadastrarNotas}
+                    onSubmit={cadastrarNota}
                     style={{
                         backgroundColor: "#FFF",
                         padding: "30px",
@@ -76,14 +75,20 @@ export default function CadNotas() {
                 >
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                         <label htmlFor="id_aluno" style={labelStyle}>ID do Aluno</label>
-                        <input
-                            id="id_aluno"
-                            type="text"
+                        <select
                             value={id_aluno}
-                            onChange={(e) => setIdAluno(e.target.value)}
+                            onChange={(event) => setIdAluno(event.target.value)}
                             style={inputStyle}
                             required
-                        />
+                        >
+                            <option value="">Selecione um aluno</option>
+
+                            {alunos.map((aluno) => (
+                                <option key={aluno.id_aluno} value={aluno.id_aluno}>
+                                    {aluno.nome} - RA {aluno.ra}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -91,7 +96,8 @@ export default function CadNotas() {
                         <input
                             id="t1"
                             type="number"
-                            step="0.1"
+                            min={0}
+                            step="0.5"
                             value={t1}
                             onChange={(e) => sett1(e.target.value)}
                             style={inputStyle}
@@ -104,7 +110,8 @@ export default function CadNotas() {
                         <input
                             id="t2"
                             type="number"
-                            step="0.1"
+                            min={0}
+                            step="0.5"
                             value={t2}
                             onChange={(e) => sett2(e.target.value)}
                             style={inputStyle}
@@ -117,7 +124,8 @@ export default function CadNotas() {
                         <input
                             id="n1"
                             type="number"
-                            step="0.1"
+                            min={0}
+                            step="0.5"
                             value={n1}
                             onChange={(e) => setn1(e.target.value)}
                             style={inputStyle}
@@ -130,7 +138,8 @@ export default function CadNotas() {
                         <input
                             id="n2"
                             type="number"
-                            step="0.1"
+                            min={0}
+                            step="0.5"
                             value={n2}
                             onChange={(e) => setn2(e.target.value)}
                             style={inputStyle}
@@ -143,7 +152,8 @@ export default function CadNotas() {
                         <input
                             id="n3"
                             type="number"
-                            step="0.1"
+                            min={0}
+                            step="0.5"
                             value={n3}
                             onChange={(e) => setn3(e.target.value)}
                             style={inputStyle}

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Header from "../components/header";
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 
 export default function CadAlunos() {
   const [nome, setNome] = useState('');
@@ -27,7 +27,7 @@ export default function CadAlunos() {
     const dados = await resposta.json();
     alert(dados.mensagem || dados.erro)
     if(resposta.ok){
-        redirect('/listalunos')
+      redirect('/listalunos')
     }
   }
 
@@ -63,6 +63,8 @@ export default function CadAlunos() {
             <input 
               id="nome"
               type="text" 
+              pattern="[A-Za-zÀ-ÿ\s]+"
+              title='Somente letras'
               value={nome} 
               onChange={(e) => setNome(e.target.value)} 
               style={inputStyle} 
@@ -74,9 +76,16 @@ export default function CadAlunos() {
             <label htmlFor="idade" style={labelStyle}>Idade</label>
             <input 
               id="idade"
-              type="number" 
+              type="number"
+              min={0}
+              max={120}
               value={idade} 
-              onChange={(e) => setIdade(e.target.value)} 
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === '' || Number(val) >= 0) {
+                  setIdade(val);
+                }
+              }}
               style={inputStyle} 
               required
             />
@@ -98,7 +107,10 @@ export default function CadAlunos() {
             <label htmlFor="ra" style={labelStyle}>RA (Registro Acadêmico)</label>
             <input 
               id="ra"
-              type="number" 
+              type="number"
+              min={1000}
+              max={9999}
+              title="O RA deve conter 4 dígitos."
               value={ra} 
               onChange={(e) => setRa(e.target.value)} 
               style={inputStyle} 

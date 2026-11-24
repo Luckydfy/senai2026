@@ -130,6 +130,8 @@ export default function EditAlunosPage({ params: paramsPromise }) {
                         <input
                             id="nome"
                             type="text"
+                            pattern="[A-Za-zÀ-ÿ\s]+"
+                            title='Somente letras'
                             value={nome}
                             onChange={(event) => setNome(event.target.value)}
                             placeholder="Digite o nome do aluno"
@@ -143,7 +145,14 @@ export default function EditAlunosPage({ params: paramsPromise }) {
                         <input
                             id="idade"
                             type="number"
+                            min={0}
+                            max={120}
                             value={idade}
+                            onKeyDown={(e) => {
+                                if (e.key === '-' || e.key === 'e' || e.key === 'E') {
+                                e.preventDefault();
+                                }
+                            }}
                             onChange={(event) => setIdade(event.target.value)}
                             placeholder="Ex.: 15"
                             style={inputStyle}
@@ -168,7 +177,10 @@ export default function EditAlunosPage({ params: paramsPromise }) {
                         <label htmlFor="ra" style={labelStyle}>RA (Registro Acadêmico)</label>
                         <input
                             id="ra"
-                            type="text"
+                            type="number"
+                            min={1000}
+                            max={9999}
+                            title="O RA deve conter 4 dígitos."
                             value={ra}
                             onChange={(event) => setRa(event.target.value)}
                             placeholder="Digite o número do RA"

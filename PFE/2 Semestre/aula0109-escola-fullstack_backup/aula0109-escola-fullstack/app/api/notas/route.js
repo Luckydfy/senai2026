@@ -1,12 +1,13 @@
-import db from "../../db/banco";
+import db from "@/app/db/banco";
 import { NextResponse } from "next/server";
 
-// GET - Busca notas e dados do aluno
+// GET - Listar todas as notas com dados dos alunos
 export async function GET() {
     try {
         const sql = db.prepare(`
             SELECT 
-                notas.rowid AS id, 
+                notas.id_notas,
+                notas.aluno_id,
                 alunos.nome, 
                 alunos.ra, 
                 notas.t1, 
@@ -23,11 +24,11 @@ export async function GET() {
         return NextResponse.json(notas);
     } catch (error) {
         console.error("Erro ao buscar notas: ", error);
-        return NextResponse.json({ erro: "Erro ao buscar notas." }, { status: 500 });
+        return NextResponse.json({ erro: "Erro ao buscar a lista de notas." }, { status: 500 });
     }
 }
 
-// POST - Salva novas notas
+// POST - Cadastrar novas notas
 export async function POST(request) {
     try {
         const dados = await request.json();
@@ -56,16 +57,16 @@ export async function POST(request) {
     }
 }
 
-// PUT - Atualiza as notas
+// PUT - Editar notas existentes
 export async function PUT(request) {
     try {
         const dados = await request.json();
-        const idNota = dados.id_nota || dados.id;
+        const idNota = dados.id_nota || dados.id_notas;
 
         const sql = db.prepare(`
             UPDATE notas
             SET t1 = ?, t2 = ?, n1 = ?, n2 = ?, n3 = ?
-            WHERE rowid = ? OR aluno_id = ?
+            WHERE id_notas = ?
         `);
 
         sql.run(
@@ -74,8 +75,7 @@ export async function PUT(request) {
             dados.n1, 
             dados.n2, 
             dados.n3, 
-            idNota,
-            dados.id_aluno || idNota
+            idNota
         );
 
         return NextResponse.json({
@@ -87,14 +87,14 @@ export async function PUT(request) {
     }
 }
 
-// DELETE - Remove notas
+// DELETE - Excluir registro de nota
 export async function DELETE(request) {
     try {
         const dados = await request.json();
-        const idNota = dados.id_nota || dados.id || dados.id_aluno;
+        const idNota = dados.id_nota || dados.id_notas;
 
-        const sql = db.prepare(`DELETE FROM notas WHERE rowid = ? OR aluno_id = ?`);
-        sql.run(idNota, idNota);
+        const sql = db.prepare(`DELETE FROM notas WHERE id_notas = ?`);
+        sql.run(idNota);
 
         return NextResponse.json({
             mensagem: "Notas excluídas com sucesso!"
